@@ -1,4 +1,4 @@
-package com.example.users.ui.users;
+package com.example.users.presentation.users;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

@@ -1,4 +1,4 @@
-package com.example.users.ui.users;
+package com.example.users.presentation.users;
 
 public interface IUsersPresenter {
 

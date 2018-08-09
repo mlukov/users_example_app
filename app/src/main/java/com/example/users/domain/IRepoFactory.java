@@ -1,4 +1,4 @@
-package com.example.users.domain.interfaces;
+package com.example.users.domain;
 
 public interface IRepoFactory {
 

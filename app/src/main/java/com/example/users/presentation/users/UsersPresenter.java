@@ -1,23 +1,31 @@
-package com.example.users.ui.users;
+package com.example.users.presentation.users;
+
+import android.content.Context;
 
 import com.example.users.data.UserData;
+import com.example.users.domain.user.IUserLogic;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsersPresenter implements IUsersPresenter {
 
-    private List<UserData> mUserDataList = new ArrayList();
-    private IUsersView mUsersView;
+    private final static String TAG = UsersPresenter.class.getSimpleName();
 
-    public UsersPresenter( IUsersView usersView ){
+    private List<UserData> mUserDataList = new ArrayList();
+
+    private IUsersView mUsersView;
+    private IUserLogic mUserLogic;
+
+    public UsersPresenter( IUsersView usersView, IUserLogic userLogic ){
 
         mUsersView = usersView;
-
+        mUserLogic = userLogic;
     }
 
     @Override
     public void onViewCreated() {
+
 
     }
 

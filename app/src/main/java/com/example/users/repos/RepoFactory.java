@@ -2,9 +2,9 @@ package com.example.users.repos;
 
 import android.support.annotation.Nullable;
 
-import com.example.users.domain.interfaces.IRepo;
-import com.example.users.domain.interfaces.IRepoFactory;
-import com.example.users.domain.interfaces.IUserApiRepo;
+import com.example.users.domain.IRepo;
+import com.example.users.domain.IRepoFactory;
+import com.example.users.domain.user.IUserApiRepo;
 
 public class RepoFactory implements IRepoFactory {
 
