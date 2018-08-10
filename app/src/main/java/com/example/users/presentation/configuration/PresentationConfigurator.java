@@ -1,6 +1,7 @@
 package com.example.users.presentation.configuration;
 
 
+import com.example.users.ApplicationContext;
 import com.example.users.domain.IRepoFactory;
 import com.example.users.domain.user.IUserLogic;
 import com.example.users.domain.user.UserLogic;
@@ -19,6 +20,11 @@ public class PresentationConfigurator implements IPresentationConfigurator {
     @Inject
     IPresentationRepoFactory presentationRepoFactory;
 
+
+    public PresentationConfigurator() {
+
+        ApplicationContext.getAppContext().component().inject( this );
+    }
 
     @Override
     public void configureUsersListView( IUsersView usersView ){

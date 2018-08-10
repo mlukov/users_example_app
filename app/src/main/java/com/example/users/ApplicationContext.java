@@ -12,10 +12,24 @@ public class ApplicationContext extends Application {
 
     private ApplicationComponent applicationComponent;
 
+    private static ApplicationContext applicationContext;
+
+    public static ApplicationContext getAppContext(){
+
+        return applicationContext;
+    }
+
+    public ApplicationComponent component() {
+
+        return applicationComponent;
+    }
+
     @Override
     public void onCreate() {
 
         super.onCreate();
+
+        applicationContext = this;
 
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule( new ApplicationModule( this ) )

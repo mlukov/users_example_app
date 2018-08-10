@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.users.ApplicationContext;
 import com.example.users.R;
 import com.example.users.presentation.configuration.IPresentationConfigurator;
 
@@ -38,6 +39,8 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
 
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
+
+        ApplicationContext.getAppContext().component().inject( this );
 
         mUsersRecyclerView = findViewById( R.id.usersRecyclerView );
         mProgressBar = findViewById( R.id.usersLoadProgressBar );
