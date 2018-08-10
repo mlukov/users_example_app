@@ -8,10 +8,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.users.R;
-import com.example.users.data.UserData;
-import com.example.users.presentation.IPresentationConfigurator;
+import com.example.users.presentation.configuration.IPresentationConfigurator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
     private ProgressBar mProgressBar;
 
     private UsersAdapter mUsersAdapter = null;
-    private List<UserData> mUserDataList = new ArrayList();
+    private List<UserViewData> mUserDataList = new ArrayList();
 
     private IUsersPresenter mUsersPresenter;
 
@@ -45,7 +45,7 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
         mUsersAdapter = new UsersAdapter( mUserDataList );
         mUsersRecyclerView.setLayoutManager(  new LinearLayoutManager( this, RecyclerView.VERTICAL, false  ) );
 
-        mUsersPresenter = mPresentationConfigurator.configureUsersListView(this );
+        mPresentationConfigurator.configureUsersListView(this );
 
         mUsersPresenter.onViewCreated();
     }
@@ -81,13 +81,19 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
 
     //region IUsersView implementation
     @Override
+    public void setPresenter( IUsersPresenter usersPresenter ) {
+
+        mUsersPresenter = usersPresenter;
+    }
+
+    @Override
     public void onStartLoadingUsers() {
 
         showProgressBar();
     }
 
     @Override
-    public void onUsersLoaded( List< UserData > userDataList ) {
+    public void onUsersLoaded( List< UserViewData > userDataList ) {
 
         mUserDataList.clear();
 
@@ -107,6 +113,7 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
     public void onUserLoadError( String errorMessage ) {
 
         hideProgressBar();
+        Toast.makeText( this, errorMessage, Toast.LENGTH_LONG ).show();
     }
     //endregion IUsersView implementation
 

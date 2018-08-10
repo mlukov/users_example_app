@@ -4,7 +4,9 @@ import com.example.users.data.UserData;
 
 import java.util.List;
 
+import io.reactivex.disposables.Disposable;
+
 public interface IUserLogic {
 
-   void getUserList( IUserListResponseHandler responseHandler );
+   Disposable getUserList( IUserListResponseHandler responseHandler );
 }

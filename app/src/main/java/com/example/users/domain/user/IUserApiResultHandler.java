@@ -1,4 +1,4 @@
-package com.example.users.repos;
+package com.example.users.domain.user;
 
 import android.support.annotation.Nullable;
 

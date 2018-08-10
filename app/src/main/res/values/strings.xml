@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Users</string>
+    <string name="internet_connection_offline">The Internet connection appears to be offline.</string>
+    <string name="oops_went_wrong_try">Oops, something went wrong. Sometimes these things happen, please try again.</string>
 </resources>

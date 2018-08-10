@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface IUserListResponseHandler {
 
-    void onLoaded( @Nullable List<UserData> userDataList );
+    void onNextList( @Nullable List<UserData> userDataList );
+
+    void onCompleteLoading();
 
     void onError( @Nullable Throwable throwable );
 }

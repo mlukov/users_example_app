@@ -8,8 +8,10 @@ public interface IUsersView {
 
     void onStartLoadingUsers();
 
-    void onUsersLoaded( List<UserData> userDataList );
+    void onUsersLoaded( List<UserViewData> userDataList );
 
     void onUserLoadError( String errorMessage );
+
+    void setPresenter( IUsersPresenter usersPresenter );
 
 }

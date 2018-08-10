@@ -15,9 +15,9 @@ import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
 
-    private List<UserData> mUserDataList;
+    private List<UserViewData> mUserDataList;
 
-    public UsersAdapter( List<UserData> userDataList ){
+    public UsersAdapter( List<UserViewData> userDataList ){
 
         mUserDataList = userDataList;
     }
@@ -28,13 +28,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         @Nullable
         private TextView mUserNamesTextView;
 
-        void bind( @Nullable UserData userData ) {
+        void bind( @Nullable UserViewData userData ) {
 
             if( this.mUserNamesTextView == null )
                 return;
 
             if( userData == null )
-                mUserNamesTextView.setText( userData.Name );
+                mUserNamesTextView.setText( userData.getUserNames() );
             else
                 mUserNamesTextView.setText( "" );
         }
