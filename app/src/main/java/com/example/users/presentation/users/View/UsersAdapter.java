@@ -1,13 +1,15 @@
-package com.example.users.presentation.users;
+package com.example.users.presentation.users.View;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.users.R;
-import com.example.users.data.UserData;
+import com.example.users.presentation.users.model.UserViewData;
 
 
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
 
-    private List<UserViewData> mUserDataList;
+    private List<UserViewData > mUserDataList;
 
     public UsersAdapter( List<UserViewData> userDataList ){
 
@@ -33,13 +35,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             if( this.mUserNamesTextView == null )
                 return;
 
-            if( userData == null )
+            if( userData != null )
                 mUserNamesTextView.setText( userData.getUserNames() );
             else
                 mUserNamesTextView.setText( "" );
         }
 
-        public UserViewHolder(@Nullable ViewGroup itemView) {
+        public UserViewHolder(@Nullable View itemView) {
 
             super(itemView);
 
@@ -53,7 +55,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     @NonNull
     public UserViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
 
-        return new UserViewHolder( parent );
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.user_adapter_item, parent, false);
+        return new UserViewHolder( view );
     }
 
     public int getItemCount() {

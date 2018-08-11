@@ -1,18 +1,20 @@
-package com.example.users.presentation.users;
+package com.example.users.presentation.users.View;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.users.ApplicationContext;
 import com.example.users.R;
 import com.example.users.presentation.configuration.IPresentationConfigurator;
+import com.example.users.presentation.users.Presenter.IUsersPresenter;
+import com.example.users.presentation.users.model.UserViewData;
+import com.example.users.presentation.users.model.UsersListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +25,10 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
 
     // Views
     private RecyclerView mUsersRecyclerView = null;
-    private ProgressBar mProgressBar;
+    private SwipeRefreshLayout mUsersSwipeRefreshLayout;
 
     private UsersAdapter mUsersAdapter = null;
-    private List<UserViewData> mUserDataList = new ArrayList();
+    private List<UserViewData > mUserDataList = new ArrayList();
 
     private IUsersPresenter mUsersPresenter;
 
@@ -43,14 +45,26 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
         ApplicationContext.getAppContext().component().inject( this );
 
         mUsersRecyclerView = findViewById( R.id.usersRecyclerView );
-        mProgressBar = findViewById( R.id.usersLoadProgressBar );
+        mUsersSwipeRefreshLayout = findViewById( R.id.usersSwipeRefreshLayout );
 
         mUsersAdapter = new UsersAdapter( mUserDataList );
-        mUsersRecyclerView.setLayoutManager(  new LinearLayoutManager( this, RecyclerView.VERTICAL, false  ) );
+
+        initUsersListView();
 
         mPresentationConfigurator.configureUsersListView(this );
 
         mUsersPresenter.onViewCreated();
+
+        mUsersSwipeRefreshLayout.setColorSchemeResources( android.R.color.holo_orange_dark );
+
+        mUsersSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                if( mUsersPresenter != null )
+                    mUsersPresenter.onRefresh();
+            }
+        });
     }
 
     @Override
@@ -64,6 +78,8 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
     public void onConfigurationChanged( Configuration newConfig ) {
 
         super.onConfigurationChanged( newConfig );
+
+        initUsersListView();
     }
 
     @Override
@@ -96,17 +112,17 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
     }
 
     @Override
-    public void onUsersLoaded( List< UserViewData > userDataList ) {
+    public void onUsersLoaded( UsersListViewModel usersListViewModel ) {
 
         mUserDataList.clear();
 
-        if( userDataList == null ){
+        if( usersListViewModel == null ){
 
             mUsersAdapter.notifyDataSetChanged();
             return;
         }
 
-        mUserDataList.addAll( userDataList );
+        mUserDataList.addAll( usersListViewModel.getUsersList() );
         mUsersAdapter.notifyDataSetChanged();
 
         hideProgressBar();
@@ -120,13 +136,25 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
     }
     //endregion IUsersView implementation
 
+    private void initUsersListView() {
+
+        boolean landscape = this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        int columns = getResources().getInteger( R.integer.users_portrait_columns );
+        if( landscape)
+            columns = getResources().getInteger( R.integer.users_landscape_columns );
+
+        mUsersRecyclerView.setLayoutManager(  new GridLayoutManager( this, columns, RecyclerView.VERTICAL, false  ) );
+        mUsersRecyclerView.setAdapter( mUsersAdapter );
+
+    }
+
     private void showProgressBar(){
 
-        mProgressBar.setVisibility( View.VISIBLE );
+        mUsersSwipeRefreshLayout.setRefreshing( true );
     }
 
     private void hideProgressBar(){
 
-        mProgressBar.setVisibility( View.GONE );
+        mUsersSwipeRefreshLayout.setRefreshing( false );
     }
 }

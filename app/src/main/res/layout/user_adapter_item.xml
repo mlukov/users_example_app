@@ -9,7 +9,10 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/user_names_text_size"
         android:layout_margin="@dimen/user_names_margin"
+        android:paddingLeft="@dimen/user_names_left_padding"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="@dimen/user_names_min_text_size"
         android:text="John Smith"
-        android:gravity="center_horizontal"/>
+        android:gravity="left"/>
 
 </RelativeLayout>

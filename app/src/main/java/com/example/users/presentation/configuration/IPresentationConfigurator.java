@@ -1,8 +1,6 @@
 package com.example.users.presentation.configuration;
 
-import com.example.users.presentation.users.IUsersPresenter;
-import com.example.users.presentation.users.IUsersView;
-import com.example.users.presentation.users.UsersActivity;
+import com.example.users.presentation.users.View.IUsersView;
 
 public interface IPresentationConfigurator {
 

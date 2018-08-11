@@ -1,11 +1,11 @@
-package com.example.users.repos;
+package com.example.users.repositories;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.example.users.presentation.IDeviceRepo;
+import com.example.users.domain.repositories.IDeviceRepo;
 
 public class DeviceRepo implements IDeviceRepo {
 
@@ -18,7 +18,7 @@ public class DeviceRepo implements IDeviceRepo {
     }
 
     @Override
-    public boolean isNetworkConnected( ) {
+    public boolean isNetworkConnected() {
 
         boolean isConnected = false;
 

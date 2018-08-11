@@ -1,4 +1,4 @@
-package com.example.users.presentation.users;
+package com.example.users.presentation.users.Presenter;
 
 public interface IUsersPresenter {
 
@@ -9,4 +9,8 @@ public interface IUsersPresenter {
     void onViewHidden();
 
     void onViewDestroyed();
+
+    void onConfigurationChanged();
+
+    void onRefresh();
 }

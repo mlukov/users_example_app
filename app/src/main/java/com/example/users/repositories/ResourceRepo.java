@@ -1,8 +1,8 @@
-package com.example.users.repos;
+package com.example.users.repositories;
 
 import android.content.Context;
 
-import com.example.users.presentation.IResourceRepo;
+import com.example.users.domain.repositories.IResourceRepo;
 
 public class ResourceRepo implements IResourceRepo {
 

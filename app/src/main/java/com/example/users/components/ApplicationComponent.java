@@ -1,14 +1,11 @@
 package com.example.users.components;
 
 
-import android.support.annotation.MainThread;
-
 import com.example.users.ApplicationContext;
-import com.example.users.domain.IRepoFactory;
-import com.example.users.presentation.IPresentationRepoFactory;
+import com.example.users.domain.repositories.IRepoFactory;
 import com.example.users.presentation.configuration.IPresentationConfigurator;
 import com.example.users.presentation.configuration.PresentationConfigurator;
-import com.example.users.presentation.users.UsersActivity;
+import com.example.users.presentation.users.View.UsersActivity;
 
 import javax.inject.Singleton;
 
@@ -26,6 +23,5 @@ public interface ApplicationComponent{
     void inject( PresentationConfigurator presentationConfigurator );
 
     IRepoFactory repoFactory();
-    IPresentationRepoFactory presentationRepoFactory();
     IPresentationConfigurator presentationConfigurator();
 }

@@ -1,4 +1,4 @@
-package com.example.users.presentation.users;
+package com.example.users.presentation.users.model;
 
 public class UserViewData {
 
