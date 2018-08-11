@@ -78,18 +78,6 @@ public class UsersPresenter implements IUsersPresenter {
     }
 
     @Override
-    public void onConfigurationChanged(){
-
-        if( mUsersViewModel == null )
-            mUsersViewModel = new UsersListViewModel( new ArrayList() );
-
-        if( mUsersViewModel.getUsersList().size() == 0){
-
-            startLoadList();
-        }
-    }
-
-    @Override
     public void onRefresh() {
 
         startLoadList();
@@ -111,7 +99,6 @@ public class UsersPresenter implements IUsersPresenter {
             mUsersViewModel.getUsersList().clear();
 
         mLoadUsersDisposable = null;
-        mUsersView = null;
         mUsersViewModel = null;
     }
 
@@ -130,6 +117,9 @@ public class UsersPresenter implements IUsersPresenter {
             @Override
             public void onNextList( @Nullable List< UserModel > userDataList ) {
 
+                if( userDataList == null || mLoadState != LoadState.Loading )
+                    return;
+
                 for( UserModel userData: userDataList )
                     mUsersViewModel.getUsersList().add(new UserViewData( userData.name ));
             }
@@ -145,6 +135,8 @@ public class UsersPresenter implements IUsersPresenter {
 
             @Override
             public void onError() {
+
+                if( mLoadState != LoadState.Loading )
 
                 mLoadState = LoadState.Error;
 

@@ -10,7 +10,5 @@ public interface IUsersPresenter {
 
     void onViewDestroyed();
 
-    void onConfigurationChanged();
-
     void onRefresh();
 }

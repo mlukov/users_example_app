@@ -7,6 +7,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.users.ApplicationContext;
@@ -26,6 +28,7 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
     // Views
     private RecyclerView mUsersRecyclerView = null;
     private SwipeRefreshLayout mUsersSwipeRefreshLayout;
+    private TextView mEmptyListText;
 
     private UsersAdapter mUsersAdapter = null;
     private List<UserViewData > mUserDataList = new ArrayList();
@@ -46,17 +49,18 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
 
         mUsersRecyclerView = findViewById( R.id.usersRecyclerView );
         mUsersSwipeRefreshLayout = findViewById( R.id.usersSwipeRefreshLayout );
+        mEmptyListText = findViewById( R.id.emptyListText );
 
         mUsersAdapter = new UsersAdapter( mUserDataList );
-
         initUsersListView();
+
+        mEmptyListText.setVisibility( View.GONE );
 
         mPresentationConfigurator.configureUsersListView(this );
 
         mUsersPresenter.onViewCreated();
 
         mUsersSwipeRefreshLayout.setColorSchemeResources( android.R.color.holo_orange_dark );
-
         mUsersSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -125,6 +129,9 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
         mUserDataList.addAll( usersListViewModel.getUsersList() );
         mUsersAdapter.notifyDataSetChanged();
 
+        boolean listIsEmpty = usersListViewModel.getUsersList().size() == 0;
+        mEmptyListText.setVisibility( listIsEmpty ? View.VISIBLE : View.GONE );
+
         hideProgressBar();
     }
 
@@ -132,6 +139,11 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
     public void onUserLoadError( String errorMessage ) {
 
         hideProgressBar();
+
+        mUserDataList.clear();
+        mUsersAdapter.notifyDataSetChanged();
+        mEmptyListText.setVisibility( View.VISIBLE );
+
         Toast.makeText( this, errorMessage, Toast.LENGTH_LONG ).show();
     }
     //endregion IUsersView implementation
