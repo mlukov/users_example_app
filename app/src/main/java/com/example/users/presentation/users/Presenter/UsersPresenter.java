@@ -127,6 +127,9 @@ public class UsersPresenter implements IUsersPresenter {
             @Override
             public void onCompleteLoading() {
 
+                if( mLoadState != LoadState.Loading )
+                    return;
+
                 mLoadState = LoadState.Loaded;
                 if( mViewShown ){
                     mUsersView.onUsersLoaded( mUsersViewModel );
@@ -137,6 +140,7 @@ public class UsersPresenter implements IUsersPresenter {
             public void onError() {
 
                 if( mLoadState != LoadState.Loading )
+                    return;
 
                 mLoadState = LoadState.Error;
 

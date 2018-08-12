@@ -8,4 +8,9 @@ public class UserModel implements Serializable {
 
     @SerializedName( "name" )
     public String name;
+
+    public UserModel( String name ) {
+
+        this.name = name;
+    }
 }
