@@ -7,15 +7,10 @@ import java.io.Serializable;
 public class UserApi implements Serializable {
 
     @SerializedName( "name" )
-    public String name;
+    private String names;
 
     public String getNames() {
 
-        return name;
-    }
-
-    public void setNames( String names ) {
-
-        this.name = names;
+        return names;
     }
 }
