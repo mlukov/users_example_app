@@ -1,8 +1,8 @@
-package com.example.users.domain.repositories;
+package com.example.users.presentation.providers;
 
 import android.support.annotation.StringRes;
 
-public interface IResourceRepo extends IRepo {
+public interface IResourceProvider {
 
     String getString( @StringRes int stringResId );
 }

@@ -6,11 +6,16 @@ import java.io.Serializable;
 
 public class UserModel implements Serializable {
 
-    @SerializedName( "name" )
-    public String name;
+    private final String names;
 
-    public UserModel( String name ) {
 
-        this.name = name;
+    public UserModel( String names ) {
+
+        this.names = names;
+    }
+
+    public String getNames() {
+
+        return names;
     }
 }

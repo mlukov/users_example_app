@@ -1,14 +1,11 @@
 package com.example.users;
 
 import com.example.users.domain.models.UserModel;
-import com.example.users.domain.repositories.IDeviceRepo;
-import com.example.users.domain.repositories.IRepoFactory;
-import com.example.users.domain.repositories.IResourceRepo;
-import com.example.users.domain.repositories.IUserApiRepo;
-import com.example.users.domain.repositories.IUserListResponseHandler;
-import com.example.users.presentation.users.Presenter.UsersPresenter;
-import com.example.users.presentation.users.View.IUsersView;
-import com.example.users.presentation.users.model.UsersListViewModel;
+import com.example.users.domain.repositories.user.IUserApiRepository;
+import com.example.users.presentation.providers.INetworkInfoProvider;
+import com.example.users.presentation.providers.IResourceProvider;
+import com.example.users.presentation.users.Presenter.UserListPresenter;
+import com.example.users.presentation.users.View.IUserListView;
 
 import org.junit.*;
 import org.mockito.ArgumentCaptor;
@@ -25,10 +22,10 @@ import static org.mockito.Mockito.*;
 public class PresenterUnitTest {
 
     private IRepoFactory    repoFactory;
-    private IUsersView      usersView;
-    private IUserApiRepo    userApiRepo;
-    private IDeviceRepo     deviceRepo;
-    private IResourceRepo   resourceRepo;
+    private IUserListView usersView;
+    private IUserApiRepository userApiRepo;
+    private INetworkInfoProvider deviceRepo;
+    private IResourceProvider resourceRepo;
 
     private String          errorMessage = "Error";
 
@@ -38,7 +35,7 @@ public class PresenterUnitTest {
 
         initInterfaces();
 
-        UsersPresenter presenter = new UsersPresenter( usersView, repoFactory );
+        UserListPresenter presenter = new UserListPresenter( usersView, repoFactory );
 
         presenter.onViewDestroyed();
         presenter.onViewCreated();
@@ -49,7 +46,7 @@ public class PresenterUnitTest {
 
         initInterfaces();
 
-        UsersPresenter presenter = new UsersPresenter( usersView, repoFactory );
+        UserListPresenter presenter = new UserListPresenter( usersView, repoFactory );
 
         presenter.onViewDestroyed();
         presenter.onViewHidden();
@@ -60,7 +57,7 @@ public class PresenterUnitTest {
 
         initInterfaces();
 
-        UsersPresenter presenter = new UsersPresenter( usersView, repoFactory );
+        UserListPresenter presenter = new UserListPresenter( usersView, repoFactory );
 
         presenter.onViewDestroyed();
         presenter.onViewShown();
@@ -90,7 +87,7 @@ public class PresenterUnitTest {
             }
         } ).when( userApiRepo ).getUserList( any( IUserListResponseHandler.class ) );
 
-        UsersPresenter presenter = new UsersPresenter( usersView, repoFactory );
+        UserListPresenter presenter = new UserListPresenter( usersView, repoFactory );
 
         ArgumentCaptor<UsersListViewModel> viewModelCaptor = ArgumentCaptor.forClass( UsersListViewModel.class );
 
@@ -132,7 +129,7 @@ public class PresenterUnitTest {
             }
         } ).when( userApiRepo ).getUserList( any( IUserListResponseHandler.class ) );
 
-        UsersPresenter presenter = new UsersPresenter( usersView, repoFactory );
+        UserListPresenter presenter = new UserListPresenter( usersView, repoFactory );
 
         ArgumentCaptor<String> errorMessageCaptor = ArgumentCaptor.forClass( String.class );
 
@@ -168,7 +165,7 @@ public class PresenterUnitTest {
             }
         } ).when( userApiRepo ).getUserList( any( IUserListResponseHandler.class ) );
 
-        UsersPresenter presenter = new UsersPresenter( usersView, repoFactory );
+        UserListPresenter presenter = new UserListPresenter( usersView, repoFactory );
 
         ArgumentCaptor<UsersListViewModel> viewModelCaptor = ArgumentCaptor.forClass( UsersListViewModel.class );
 
@@ -208,7 +205,7 @@ public class PresenterUnitTest {
             }
         } ).when( userApiRepo ).getUserList( any( IUserListResponseHandler.class ) );
 
-        UsersPresenter presenter = new UsersPresenter( usersView, repoFactory );
+        UserListPresenter presenter = new UserListPresenter( usersView, repoFactory );
 
         presenter.onViewCreated();
 
@@ -221,14 +218,14 @@ public class PresenterUnitTest {
     private void initInterfaces(){
 
         repoFactory     = mock( IRepoFactory.class );
-        usersView       = mock( IUsersView.class);
-        userApiRepo     = mock( IUserApiRepo.class );
-        deviceRepo      = mock( IDeviceRepo.class );
-        resourceRepo    = mock( IResourceRepo.class );
+        usersView       = mock( IUserListView.class);
+        userApiRepo     = mock( IUserApiRepository.class );
+        deviceRepo      = mock( INetworkInfoProvider.class );
+        resourceRepo    = mock( IResourceProvider.class );
 
-        when(repoFactory.getRepository( IUserApiRepo.class )).thenReturn( userApiRepo );
-        when(repoFactory.getRepository( IDeviceRepo.class )).thenReturn( deviceRepo );
-        when(repoFactory.getRepository( IResourceRepo.class )).thenReturn( resourceRepo );
+        when(repoFactory.getRepository( IUserApiRepository.class )).thenReturn( userApiRepo );
+        when(repoFactory.getRepository( INetworkInfoProvider.class )).thenReturn( deviceRepo );
+        when(repoFactory.getRepository( IResourceProvider.class )).thenReturn( resourceRepo );
 
         when( deviceRepo.isNetworkConnected()).thenReturn( false );
         when( resourceRepo.getString( any( int.class ) ) ).thenReturn( errorMessage );

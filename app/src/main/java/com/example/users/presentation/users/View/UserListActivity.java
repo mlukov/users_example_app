@@ -11,19 +11,18 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.users.ApplicationContext;
 import com.example.users.R;
-import com.example.users.presentation.configuration.IPresentationConfigurator;
-import com.example.users.presentation.users.Presenter.IUsersPresenter;
+import com.example.users.presentation.users.Presenter.IUserListPresenter;
 import com.example.users.presentation.users.model.UserViewData;
-import com.example.users.presentation.users.model.UsersListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class UsersActivity extends AppCompatActivity implements IUsersView {
+import dagger.android.AndroidInjection;
+
+public class UserListActivity extends AppCompatActivity implements IUserListView {
 
     // Views
     private RecyclerView mUsersRecyclerView = null;
@@ -33,19 +32,16 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
     private UsersAdapter mUsersAdapter = null;
     private List<UserViewData > mUserDataList = new ArrayList();
 
-    private IUsersPresenter mUsersPresenter;
-
     @Inject
-    IPresentationConfigurator mPresentationConfigurator;
+    IUserListPresenter mUsersPresenter;
 
     //region AppCompatActivity overrides
     @Override
     public void onCreate( @Nullable Bundle savedInstanceState ) {
 
+        AndroidInjection.inject(this);
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
-
-        ApplicationContext.getAppContext().component().inject( this );
 
         mUsersRecyclerView = findViewById( R.id.usersRecyclerView );
         mUsersSwipeRefreshLayout = findViewById( R.id.usersSwipeRefreshLayout );
@@ -56,17 +52,14 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
 
         mEmptyListText.setVisibility( View.GONE );
 
-        mPresentationConfigurator.configureUsersListView(this );
-
-        mUsersPresenter.onViewCreated();
+        AndroidInjection.inject(this);
 
         mUsersSwipeRefreshLayout.setColorSchemeResources( android.R.color.holo_orange_dark );
         mUsersSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
-                if( mUsersPresenter != null )
-                    mUsersPresenter.onRefresh();
+                mUsersPresenter.loadUserList();
             }
         });
     }
@@ -75,7 +68,7 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
     protected void onResume() {
 
         super.onResume();
-        mUsersPresenter.onViewShown();
+        mUsersPresenter.loadUserList();
     }
 
     @Override
@@ -89,56 +82,40 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
     @Override
     protected void onPause() {
 
-        mUsersPresenter.onViewHidden();
+        mUsersPresenter.dispose();
         super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        mUsersPresenter.onViewDestroyed();
-        super.onDestroy();
     }
     //region AppCompatActivity overrides
 
 
-    //region IUsersView implementation
-    @Override
-    public void setPresenter( IUsersPresenter usersPresenter ) {
+    //region IUserListView implementation
 
-        mUsersPresenter = usersPresenter;
+    @Override
+    public void loading( boolean isLoading ) {
+
+        mUsersSwipeRefreshLayout.setRefreshing( isLoading );
     }
 
     @Override
-    public void onStartLoadingUsers() {
-
-        showProgressBar();
-    }
-
-    @Override
-    public void onUsersLoaded( UsersListViewModel usersListViewModel ) {
+    public void onUsersLoaded( List<UserViewData> userViewDataList ) {
 
         mUserDataList.clear();
 
-        if( usersListViewModel == null ){
+        if( userViewDataList == null ){
 
             mUsersAdapter.notifyDataSetChanged();
             return;
         }
 
-        mUserDataList.addAll( usersListViewModel.getUsersList() );
+        mUserDataList.addAll( userViewDataList );
         mUsersAdapter.notifyDataSetChanged();
 
-        boolean listIsEmpty = usersListViewModel.getUsersList().size() == 0;
+        boolean listIsEmpty = userViewDataList.size() == 0;
         mEmptyListText.setVisibility( listIsEmpty ? View.VISIBLE : View.GONE );
-
-        hideProgressBar();
     }
 
     @Override
     public void onUserLoadError( String errorMessage ) {
-
-        hideProgressBar();
 
         mUserDataList.clear();
         mUsersAdapter.notifyDataSetChanged();
@@ -146,7 +123,7 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
 
         Toast.makeText( this, errorMessage, Toast.LENGTH_LONG ).show();
     }
-    //endregion IUsersView implementation
+    //endregion IUserListView implementation
 
     private void initUsersListView() {
 
@@ -160,13 +137,4 @@ public class UsersActivity extends AppCompatActivity implements IUsersView {
 
     }
 
-    private void showProgressBar(){
-
-        mUsersSwipeRefreshLayout.setRefreshing( true );
-    }
-
-    private void hideProgressBar(){
-
-        mUsersSwipeRefreshLayout.setRefreshing( false );
-    }
 }

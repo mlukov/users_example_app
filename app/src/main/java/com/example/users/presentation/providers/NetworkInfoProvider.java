@@ -1,19 +1,22 @@
-package com.example.users.repositories;
+package com.example.users.presentation.providers;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.example.users.domain.repositories.IDeviceRepo;
+import javax.inject.Inject;
 
-public class DeviceRepo implements IDeviceRepo {
+public class NetworkInfoProvider implements INetworkInfoProvider {
 
-    private static final String LOG_TAG = DeviceRepo.class.getSimpleName();
-    private Context mContext;
+    private static final String LOG_TAG = NetworkInfoProvider.class.getSimpleName();
 
-    public DeviceRepo( Context context ) {
+    private final Context mContext;
 
+    @Inject
+    public NetworkInfoProvider( Context context ) {
+
+        assert context != null;
         mContext = context;
     }
 
